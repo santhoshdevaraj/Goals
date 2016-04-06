@@ -7,19 +7,20 @@
         android:id="@+id/iv_logo"
         android:layout_width="192dp"
         android:layout_height="192dp"
+        android:contentDescription="logo"
         android:layout_centerHorizontal="true"
         android:layout_margin="84dp"
         android:scaleType="fitXY"
         android:src="@drawable/logo" />
 
     <Button
-        android:background="@drawable/bg_button_add_it"
         android:id="@+id/iv_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_logo"
         android:layout_centerHorizontal="true"
-        android:layout_margin="24dp"
+        android:layout_margin="@dimen/button_margin"
+        android:background="@drawable/bg_button_add_it"
         android:contentDescription="@string/bucket_logo"
         android:fontFamily="sans-serif-thin"
         android:paddingBottom="8dp"
@@ -27,8 +28,8 @@
         android:paddingRight="60dp"
         android:paddingTop="8dp"
         android:text="@string/add_a_drop"
-        android:textColor="@color/btn_add_color"
         android:textAllCaps="false"
+        android:textColor="@color/btn_add_color"
         android:textSize="28sp" />
 
 </RelativeLayout>
