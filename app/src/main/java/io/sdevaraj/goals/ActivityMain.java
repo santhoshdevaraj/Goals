@@ -6,7 +6,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -18,9 +17,15 @@ public class ActivityMain extends AppCompatActivity {
     private View.OnClickListener mBtnListener = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            Toast.makeText(ActivityMain.this, "Button is clicked", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ActivityMain.this, "Button is clicked", Toast.LENGTH_SHORT).show();
+            showDialogAdd();
         }
     };
+
+    private void showDialogAdd() {
+        DialogAdd dialog = new DialogAdd();
+        dialog.show(getSupportFragmentManager(), "Add");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -2,4 +2,12 @@
     <string name="app_name">Bucket Drops</string>
     <string name="add_a_drop">Add a drop</string>
     <string name="bucket_logo">Bucket logo</string>
+    <string name="fragment_a">Hello i am the fragment 1</string>
+    <string name="fragment_b">Hello i am the fragment 2</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="str_add_drop">Add a drop</string>
+    <string name="hint_et_drop">What is it?</string>
+    <string name="str_add_it">Add it</string>
 </resources>
