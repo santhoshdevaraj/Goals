@@ -17,7 +17,6 @@ public class ActivityMain extends AppCompatActivity {
     private View.OnClickListener mBtnListener = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-//            Toast.makeText(ActivityMain.this, "Button is clicked", Toast.LENGTH_SHORT).show();
             showDialogAdd();
         }
     };
