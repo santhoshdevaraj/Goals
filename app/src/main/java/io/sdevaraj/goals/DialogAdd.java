@@ -54,10 +54,6 @@ public class DialogAdd extends DialogFragment {
         realm.close();
     }
 
-    public DialogAdd() {
-
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
