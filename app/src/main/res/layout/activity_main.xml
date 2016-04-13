@@ -9,12 +9,14 @@
 
     <include layout="@layout/background_image" />
 
-    <android.support.v7.widget.RecyclerView
+    <io.sdevaraj.goals.widgets.BucketRecyclerView
         android:id="@+id/rv_drops"
-        android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar" />
 
-    <include layout="@layout/empty_drops" />
+    <include
+        android:id="@+id/empty_drops"
+        layout="@layout/empty_drops" />
 
 </RelativeLayout>

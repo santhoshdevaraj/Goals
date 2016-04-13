@@ -3,7 +3,6 @@ package io.sdevaraj.goals;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -16,15 +15,17 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.sdevaraj.goals.adapters.AdapterDrops;
 import io.sdevaraj.goals.beans.Drop;
+import io.sdevaraj.goals.widgets.BucketRecyclerView;
 
 public class ActivityMain extends AppCompatActivity {
 
     Toolbar mToolbar;
     Button eButton;
-    RecyclerView mRecycler;
+    BucketRecyclerView mRecycler;
     Realm mRealm;
     RealmResults<Drop> mResults;
     AdapterDrops mAdapter;
+    View mEmptyView;
     private String TAG = "Realm";
 
     private View.OnClickListener mBtnListener = new View.OnClickListener() {
@@ -51,18 +52,22 @@ public class ActivityMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initBackgroundImage();
         mRealm = Realm.getDefaultInstance();
         mResults = mRealm.where(Drop.class).findAllAsync();
-        mRecycler = (RecyclerView) findViewById(R.id.rv_drops);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         eButton = (Button) findViewById(R.id.iv_button);
+        mRecycler = (BucketRecyclerView) findViewById(R.id.rv_drops);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mEmptyView = findViewById(R.id.empty_drops);
+        mRecycler.hideIfEmpty(mToolbar);
+        mRecycler.showIfEmpty(mEmptyView);
+
         LinearLayoutManager manager = new LinearLayoutManager(this);
         mRecycler.setLayoutManager(manager);
         mAdapter = new AdapterDrops(this, mResults);
         mRecycler.setAdapter(mAdapter);
         setSupportActionBar(mToolbar);
         eButton.setOnClickListener(mBtnListener);
+        initBackgroundImage();
     }
 
     private void initBackgroundImage() {
