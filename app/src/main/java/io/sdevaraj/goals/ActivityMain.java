@@ -2,6 +2,7 @@ package io.sdevaraj.goals;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+
+import io.sdevaraj.goals.adapters.AdapterDrops;
 
 public class ActivityMain extends AppCompatActivity {
 
@@ -36,6 +39,9 @@ public class ActivityMain extends AppCompatActivity {
         mRecycler = (RecyclerView) findViewById(R.id.rv_drops);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         eButton = (Button) findViewById(R.id.iv_button);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        mRecycler.setLayoutManager(manager);
+        mRecycler.setAdapter(new AdapterDrops(this));
         setSupportActionBar(mToolbar);
         eButton.setOnClickListener(mBtnListener);
     }
