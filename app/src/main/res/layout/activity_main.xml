@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
     tools:context="io.sdevaraj.goals.ActivityMain">
 
-    <include layout="@layout/toolbar" />
-
     <include layout="@layout/background_image" />
+
+    <include layout="@layout/toolbar" />
 
     <io.sdevaraj.goals.widgets.BucketRecyclerView
         android:id="@+id/rv_drops"
