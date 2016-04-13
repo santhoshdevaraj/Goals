@@ -11,18 +11,34 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 import io.sdevaraj.goals.adapters.AdapterDrops;
+import io.sdevaraj.goals.beans.Drop;
 
 public class ActivityMain extends AppCompatActivity {
 
     Toolbar mToolbar;
     Button eButton;
     RecyclerView mRecycler;
+    Realm mRealm;
+    RealmResults<Drop> mResults;
+    AdapterDrops mAdapter;
+    private String TAG = "Realm";
 
-    private View.OnClickListener mBtnListener = new View.OnClickListener(){
+    private View.OnClickListener mBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             showDialogAdd();
+        }
+    };
+
+    private RealmChangeListener mChangeListener = new RealmChangeListener() {
+        @Override
+        public void onChange() {
+//            Log.d(TAG, "onChange: was called");
+            mAdapter.Update(mResults);
         }
     };
 
@@ -36,12 +52,15 @@ public class ActivityMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initBackgroundImage();
+        mRealm = Realm.getDefaultInstance();
+        mResults = mRealm.where(Drop.class).findAllAsync();
         mRecycler = (RecyclerView) findViewById(R.id.rv_drops);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         eButton = (Button) findViewById(R.id.iv_button);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         mRecycler.setLayoutManager(manager);
-        mRecycler.setAdapter(new AdapterDrops(this));
+        mAdapter = new AdapterDrops(this, mResults);
+        mRecycler.setAdapter(mAdapter);
         setSupportActionBar(mToolbar);
         eButton.setOnClickListener(mBtnListener);
     }
@@ -52,5 +71,17 @@ public class ActivityMain extends AppCompatActivity {
                 .load(R.drawable.background)
                 .centerCrop()
                 .into(backgroundImageView);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mResults.addChangeListener(mChangeListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mResults.removeChangeListener(mChangeListener);
     }
 }

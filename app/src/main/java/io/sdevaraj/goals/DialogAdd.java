@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.sdevaraj.goals.beans.Drop;
 
 
@@ -43,8 +42,6 @@ public class DialogAdd extends DialogFragment {
         String what = mInputWhat.getText().toString();
         long now = System.currentTimeMillis();
 
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(getActivity()).build();
-        Realm.setDefaultConfiguration(realmConfiguration);
         Realm realm = Realm.getDefaultInstance();
         Drop drop = new Drop(what, now, 0, false);
 
