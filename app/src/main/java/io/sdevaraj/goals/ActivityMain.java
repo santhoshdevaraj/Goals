@@ -2,7 +2,6 @@ package io.sdevaraj.goals;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -60,9 +59,6 @@ public class ActivityMain extends AppCompatActivity {
         mEmptyView = findViewById(R.id.empty_drops);
         mRecycler.hideIfEmpty(mToolbar);
         mRecycler.showIfEmpty(mEmptyView);
-
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        mRecycler.setLayoutManager(manager);
         mAdapter = new AdapterDrops(this, mResults);
         mRecycler.setAdapter(mAdapter);
         setSupportActionBar(mToolbar);
