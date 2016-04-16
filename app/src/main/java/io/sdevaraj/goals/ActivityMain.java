@@ -19,7 +19,7 @@ import io.sdevaraj.goals.widgets.BucketRecyclerView;
 public class ActivityMain extends AppCompatActivity {
 
     Toolbar mToolbar;
-    Button eButton;
+    Button mButton;
     BucketRecyclerView mRecycler;
     Realm mRealm;
     RealmResults<Drop> mResults;
@@ -53,7 +53,7 @@ public class ActivityMain extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mRealm = Realm.getDefaultInstance();
         mResults = mRealm.where(Drop.class).findAllAsync();
-        eButton = (Button) findViewById(R.id.iv_button);
+        mButton = (Button) findViewById(R.id.iv_button);
         mRecycler = (BucketRecyclerView) findViewById(R.id.rv_drops);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mEmptyView = findViewById(R.id.empty_drops);
@@ -62,7 +62,7 @@ public class ActivityMain extends AppCompatActivity {
         mAdapter = new AdapterDrops(this, mResults);
         mRecycler.setAdapter(mAdapter);
         setSupportActionBar(mToolbar);
-        eButton.setOnClickListener(mBtnListener);
+        mButton.setOnClickListener(mBtnListener);
         initBackgroundImage();
     }
 
