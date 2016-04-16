@@ -54,18 +54,15 @@ public class DialogAdd extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_add, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mInputWhat = (EditText) view.findViewById(R.id.et_drop);
-        mBtnClose = (ImageButton) view.findViewById(R.id.btn_close);
-        mInputWhen = (DatePicker) view.findViewById(R.id.bpv_date);
-        mBtnAdd = (Button) view.findViewById(R.id.btn_add);
+        View fragmentView = inflater.inflate(R.layout.dialog_add, container, false);
+        mInputWhat = (EditText) fragmentView.findViewById(R.id.et_drop);
+        mBtnClose = (ImageButton) fragmentView.findViewById(R.id.btn_close);
+        mInputWhen = (DatePicker) fragmentView.findViewById(R.id.bpv_date);
+        mBtnAdd = (Button) fragmentView.findViewById(R.id.btn_add);
 
         mBtnClose.setOnClickListener(mBtnClickListener);
         mBtnAdd.setOnClickListener(mBtnClickListener);
+
+        return fragmentView;
     }
 }
