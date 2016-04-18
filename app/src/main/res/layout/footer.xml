@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/btn_footer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/btn_add_margin_vertical"
+    android:layout_marginTop="@dimen/btn_add_margin_vertical"
+    android:layout_marginLeft="@dimen/btn_add_margin_horizontal"
+    android:layout_marginRight="@dimen/btn_add_margin_horizontal"
+    android:background="@drawable/bg_button_add_it"
+    android:text="@string/add_a_drop"
+    android:textAllCaps="false"
+    android:textSize="@dimen/btn_add_font_size">
+</Button>

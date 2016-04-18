@@ -65,7 +65,7 @@ public class BucketRecyclerView extends RecyclerView {
      */
     private void toggleViews() {
         if (getAdapter() != null && !mEmptyViews.isEmpty() && !mNonEmptyViews.isEmpty()) {
-            if (getAdapter().getItemCount() == 0 ) { // getItemCount(), gets count of items in the data set attached to the adapter
+            if (getAdapter().getItemCount() == 1 ) { // getItemCount(), gets count of items in the data set attached to the adapter
                 Util.showViews(mEmptyViews);    // show the empty_drop view
                 setVisibility(View.GONE);       // hide the recycler view ie list of drops
                 Util.hideViews(mNonEmptyViews); // hide the toolbar view
