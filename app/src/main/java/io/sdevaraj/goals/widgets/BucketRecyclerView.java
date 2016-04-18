@@ -20,7 +20,13 @@ public class BucketRecyclerView extends RecyclerView {
     private List<View> mNonEmptyViews = Collections.emptyList();
     private List<View> mEmptyViews = Collections.emptyList();
 
+    /**
+     * Observer for refreshing the view based on the data set changes.
+     */
     private AdapterDataObserver mObserver = new AdapterDataObserver() {
+        /**
+         * Called by notifyDataSetChanged() to refresh the views.
+         */
         @Override
         public void onChanged() {
             toggleViews();
@@ -52,22 +58,21 @@ public class BucketRecyclerView extends RecyclerView {
         }
     };
 
+    /**
+     * Based on presence/absence of drops, displays/hides the toolbar and the empty_drop view.
+     * If no drops, hide the toolbar but display the empty_drop view.
+     * Else, display the toolbar and hide the empty_drop view.
+     */
     private void toggleViews() {
         if (getAdapter() != null && !mEmptyViews.isEmpty() && !mNonEmptyViews.isEmpty()) {
-            if (getAdapter().getItemCount() == 0 ) {
-                // hide the recycler view
-                Util.showViews(mEmptyViews);
-                // show all the empty views
-                setVisibility(View.GONE);
-                // hide all the views to be hidden
-                Util.hideViews(mNonEmptyViews);
+            if (getAdapter().getItemCount() == 0 ) { // getItemCount(), gets count of items in the data set attached to the adapter
+                Util.showViews(mEmptyViews);    // show the empty_drop view
+                setVisibility(View.GONE);       // hide the recycler view ie list of drops
+                Util.hideViews(mNonEmptyViews); // hide the toolbar view
             } else {
-                // show all the other views
-                Util.showViews(mNonEmptyViews);
-                // show the recycler view
-                setVisibility(View.VISIBLE);
-                // hide all the empty views
-                Util.hideViews(mEmptyViews);
+                Util.showViews(mNonEmptyViews); // show the toolbar view
+                setVisibility(View.VISIBLE);    // show the recycler view ie list of drops
+                Util.hideViews(mEmptyViews);    // hide the empty_drop view
             }
         }
     }
@@ -84,14 +89,24 @@ public class BucketRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
+    /**
+     * Gets the list of views to be displayed/hidden when there is a list of drops
+     */
     public void hideIfEmpty(View... views) {
         mNonEmptyViews = Arrays.asList(views);
     }
 
+    /**
+     * Gets the list of views to be displayed/hidden when there are no drops
+     */
     public void showIfEmpty(View... views) {
         mEmptyViews = Arrays.asList(views);
     }
 
+    /**
+     * Registers the adapter and observer for the recycler view.
+     * TODO: Why is onChanged() called below ?
+     */
     @Override
     public void setAdapter(Adapter adapter) {
         super.setAdapter(adapter);

@@ -6,7 +6,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 /**
- * Created by sdevaraj on 4/13/16.
+ * Called when the application is initially loaded. Used for setting the configurations.
  */
 public class AppBucketDrops extends Application {
     @Override
