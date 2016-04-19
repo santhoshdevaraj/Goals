@@ -9,5 +9,5 @@
     <dimen name="iv_drop_size">12dp</dimen>
     <dimen name="btn_add_font_size">28sp</dimen>
     <dimen name="btn_add_margin_horizontal">60dp</dimen>
-    <dimen name="btn_add_margin_vertical">128p</dimen>
+    <dimen name="btn_add_margin_vertical">128dp</dimen>
 </resources>
