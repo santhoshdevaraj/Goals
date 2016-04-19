@@ -23,10 +23,12 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int ITEM = 0;
     public static final int FOOTER = 1;
     public static final String TAG = "Santhosh";
+    private AddListener mAddListener;
 
-    public AdapterDrops(Context context, RealmResults<Drop> results) {
+    public AdapterDrops(Context context, RealmResults<Drop> results, AddListener listener) {
         mInflater = LayoutInflater.from(context);
         mResults = results;
+        mAddListener = listener;
     }
 
     /**
@@ -44,14 +46,19 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     /**
      * View holder definition. Represents the footer within the recycler view.
-     * TODO: Unsure the purpose of the mBtnAdd. Works fine without that variable.
      */
-    public static class FooterHolder extends RecyclerView.ViewHolder {
-        Button mBtnAdd;
+    public class FooterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        Button mBtnFooter;
 
         public FooterHolder(View itemView) {
             super(itemView);
-            mBtnAdd = (Button) itemView.findViewById(R.id.btn_add);
+            mBtnFooter = (Button) itemView.findViewById(R.id.btn_footer);
+            mBtnFooter.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mAddListener.add();
         }
     }
 

@@ -2,6 +2,7 @@ package io.sdevaraj.goals;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,8 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.sdevaraj.goals.adapters.AdapterDrops;
+import io.sdevaraj.goals.adapters.AddListener;
+import io.sdevaraj.goals.adapters.Divider;
 import io.sdevaraj.goals.beans.Drop;
 import io.sdevaraj.goals.widgets.BucketRecyclerView;
 
@@ -37,6 +40,16 @@ public class ActivityMain extends AppCompatActivity {
     private View.OnClickListener mBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            showDialogAdd();
+        }
+    };
+
+    /**
+     * Implements the methods for the interface between the adapter and fragment
+     */
+    private AddListener mAddListener = new AddListener() {
+        @Override
+        public void add() {
             showDialogAdd();
         }
     };
@@ -85,14 +98,17 @@ public class ActivityMain extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mEmptyDrop = findViewById(R.id.empty_drops);
 
-        // TODO: Add comments for below
+        // based on the number of drops hides/displays certain views within activity
         mRecycler.hideIfEmpty(mToolbar);
         mRecycler.showIfEmpty(mEmptyDrop);
 
         // adds an adapter to the RecyclerView ie to provide a mapping
         // between the data and view
-        mAdapter = new AdapterDrops(this, mResults);
+        mAdapter = new AdapterDrops(this, mResults, mAddListener);
         mRecycler.setAdapter(mAdapter);
+
+        // add the decoration ie divider for the recycler view
+        mRecycler.addItemDecoration(new Divider(this, LinearLayoutManager.VERTICAL));
 
         // sets the toolbar
         setSupportActionBar(mToolbar);
