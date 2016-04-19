@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 import io.sdevaraj.goals.R;
 import io.sdevaraj.goals.beans.Drop;
@@ -16,19 +17,34 @@ import io.sdevaraj.goals.beans.Drop;
  *  AdapterDrops (Adapter) provide a binding from the data set to views
  *  that are displayed within a RecyclerView.
  */
-public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements SwipeListener{
 
     private LayoutInflater mInflater;
     private RealmResults<Drop> mResults;
+    private Realm mRealm;
     public static final int ITEM = 0;
     public static final int FOOTER = 1;
     public static final String TAG = "Santhosh";
     private AddListener mAddListener;
 
-    public AdapterDrops(Context context, RealmResults<Drop> results, AddListener listener) {
+    public AdapterDrops(Context context, Realm realm, RealmResults<Drop> results, AddListener listener) {
         mInflater = LayoutInflater.from(context);
         mResults = results;
         mAddListener = listener;
+        mRealm = realm;
+    }
+
+    /**
+     * Removes the element from the DB when its swiped and notifies the observers.
+     */
+    @Override
+    public void onSwipe(int position) {
+        if (position < mResults.size()) {
+            mRealm.beginTransaction();
+            mResults.get(position).removeFromRealm();
+            mRealm.commitTransaction();
+            notifyItemRemoved(position);
+        }
     }
 
     /**

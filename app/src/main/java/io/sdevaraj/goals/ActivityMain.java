@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import io.realm.RealmResults;
 import io.sdevaraj.goals.adapters.AdapterDrops;
 import io.sdevaraj.goals.adapters.AddListener;
 import io.sdevaraj.goals.adapters.Divider;
+import io.sdevaraj.goals.adapters.SimpleTouchCallback;
 import io.sdevaraj.goals.beans.Drop;
 import io.sdevaraj.goals.widgets.BucketRecyclerView;
 
@@ -104,11 +106,16 @@ public class ActivityMain extends AppCompatActivity {
 
         // adds an adapter to the RecyclerView ie to provide a mapping
         // between the data and view
-        mAdapter = new AdapterDrops(this, mResults, mAddListener);
+        mAdapter = new AdapterDrops(this, mRealm, mResults, mAddListener);
         mRecycler.setAdapter(mAdapter);
 
         // add the decoration ie divider for the recycler view
         mRecycler.addItemDecoration(new Divider(this, LinearLayoutManager.VERTICAL));
+
+        // add the swipe listener and callback
+        SimpleTouchCallback callback = new SimpleTouchCallback(mAdapter);
+        ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(mRecycler);
 
         // sets the toolbar
         setSupportActionBar(mToolbar);
