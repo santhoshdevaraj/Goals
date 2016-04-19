@@ -131,33 +131,4 @@ public class ActivityMain extends AppCompatActivity {
                 .centerCrop()
                 .into(backgroundImageView);
     }
-
-//    /**
-//     * Called when the activity is visible to the user.
-//     * TODO: Investigate why the listener should be added on every onStart activity.
-//     * TODO: Investigate if the results/view can be refreshed without doing this.
-//     */
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        mResults.addChangeListener(mChangeListener);
-//    }
-//
-//    /**
-//     * Called when the activity is visible to the user.
-//     */
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        mResults.removeChangeListener(mChangeListener);
-//    }
-
-    /**
-     * Called when the activity is destroyed. Used for clean up.
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mResults.removeChangeListener(mChangeListener);
-    }
 }
