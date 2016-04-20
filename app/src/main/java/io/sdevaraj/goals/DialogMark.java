@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import io.sdevaraj.goals.adapters.CompleteListener;
+
 /**
  * Created by sdevaraj on 4/19/16.
  */
@@ -16,12 +18,21 @@ public class DialogMark extends DialogFragment {
 
     private ImageButton mBtnClose;
     private Button mBtnCompleted;
+    private int mPosition;
+    private CompleteListener mListener;
 
+
+    /**
+     * Implements the onClickListener interface. Gets the bundle arguments passed
+     * from ActivityMain when the fragment 'Mark Completed' is shown.
+     */
     private View.OnClickListener mBtnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (v.getId() == R.id.btn_completed) {
-                int m = 1;
+            if (mListener != null && v.getId() == R.id.btn_completed) {
+                Bundle arguments = getArguments();
+                mPosition = arguments.getInt("POSITION");
+                mListener.onComplete(mPosition);
             }
             dismiss();
         }
@@ -39,5 +50,12 @@ public class DialogMark extends DialogFragment {
         mBtnCompleted = (Button) view.findViewById(R.id.btn_completed);
         mBtnClose.setOnClickListener(mBtnClickListener);
         mBtnCompleted.setOnClickListener(mBtnClickListener);
+    }
+
+    /**
+     * Setter for receiving the CompleteListener from ActivityMain.
+     */
+    public void setCompleteListener(CompleteListener completeListener) {
+        mListener = completeListener;
     }
 }

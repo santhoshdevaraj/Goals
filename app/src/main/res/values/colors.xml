@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="deep_blue">#241543</color>
     <color name="bg_row_drop_dark">#BD8E79BB</color>
+    <color name="bg_drop_complete">#ED8E79BB</color>
     <color name="bg_row_drop_light">#4A8E79BB</color>
     <color name="bg_dialog">#E30D0028</color>
     <color name="ic_check">#C35DC66E</color>

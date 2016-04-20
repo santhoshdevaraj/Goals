@@ -17,6 +17,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.sdevaraj.goals.adapters.AdapterDrops;
 import io.sdevaraj.goals.adapters.AddListener;
+import io.sdevaraj.goals.adapters.CompleteListener;
 import io.sdevaraj.goals.adapters.Divider;
 import io.sdevaraj.goals.adapters.MarkListener;
 import io.sdevaraj.goals.adapters.SimpleTouchCallback;
@@ -68,6 +69,16 @@ public class ActivityMain extends AppCompatActivity {
     };
 
     /**
+     * Implements the methods for the CompleteListener interface between the adapter and fragment
+     */
+    private CompleteListener mCompleteListener = new CompleteListener() {
+        @Override
+        public void onComplete(int position) {
+            mAdapter.markComplete(position);
+        }
+    };
+
+    /**
      * Listener for changes to the DB ie RealmResults object change events like update, insert, delete
      */
     private RealmChangeListener mChangeListener = new RealmChangeListener() {
@@ -96,6 +107,7 @@ public class ActivityMain extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putInt("POSITION", position);
         dialog.setArguments(bundle);
+        dialog.setCompleteListener(mCompleteListener);
         dialog.show(getSupportFragmentManager(), "Mark");
     }
 

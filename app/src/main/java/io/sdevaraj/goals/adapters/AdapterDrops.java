@@ -1,6 +1,8 @@
 package io.sdevaraj.goals.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +16,10 @@ import io.sdevaraj.goals.R;
 import io.sdevaraj.goals.beans.Drop;
 
 /**
- *  AdapterDrops (Adapter) provide a binding from the data set to views
- *  that are displayed within a RecyclerView.
+ * AdapterDrops (Adapter) provide a binding from the data set to views
+ * that are displayed within a RecyclerView.
  */
-public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements SwipeListener{
+public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements SwipeListener {
 
     private LayoutInflater mInflater;
     private RealmResults<Drop> mResults;
@@ -49,6 +51,18 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+    /**
+     * Marks the item as complete in the DB on button click.
+     */
+    public void markComplete(int position) {
+        if (position < mResults.size()) {
+            mRealm.beginTransaction();
+            mResults.get(position).setCompleted(true);
+            mRealm.commitTransaction();
+            notifyItemChanged(position);
+        }
+    }
+
 
     /**
      * View holder definition. Represents a single row within the recycler view.
@@ -58,9 +72,11 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static class DropHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView mText;
         MarkListener mMarkListener;
+        Context mContext;
 
         public DropHolder(View itemView, MarkListener markListener) {
             super(itemView);
+            mContext = itemView.getContext();
             mMarkListener = markListener;
             itemView.setOnClickListener(this);
             mText = (TextView) itemView.findViewById(R.id.tv_what);
@@ -69,6 +85,26 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         @Override
         public void onClick(View v) {
             mMarkListener.onMark(getAdapterPosition());
+        }
+
+        /**
+         * Sets the text in each drop. Called from onBindViewHolder.
+         */
+        public void setWhat(String what) {
+            mText.setText(what);
+        }
+
+        /**
+         * Sets the background color in each drop. Called from onBindViewHolder.
+         */
+        public void setBackground(boolean completed) {
+            Drawable drawable;
+            if (completed) {
+                drawable = ContextCompat.getDrawable(mContext, R.color.bg_drop_complete);
+            } else {
+                drawable = ContextCompat.getDrawable(mContext, R.drawable.bg_row_drop);
+            }
+            itemView.setBackground(drawable);
         }
     }
 
@@ -138,7 +174,8 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (holder instanceof DropHolder) {
             DropHolder dropHolder = (DropHolder) holder;
             Drop drop = mResults.get(position);
-            dropHolder.mText.setText(drop.getWhat());
+            dropHolder.setWhat(drop.getWhat());
+            dropHolder.setBackground(drop.isCompleted());
         }
     }
 
