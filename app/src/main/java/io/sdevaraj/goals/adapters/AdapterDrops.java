@@ -26,11 +26,13 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int FOOTER = 1;
     public static final String TAG = "Santhosh";
     private AddListener mAddListener;
+    private MarkListener mMarkListener;
 
-    public AdapterDrops(Context context, Realm realm, RealmResults<Drop> results, AddListener listener) {
+    public AdapterDrops(Context context, Realm realm, RealmResults<Drop> results, AddListener listener, MarkListener markListener) {
         mInflater = LayoutInflater.from(context);
         mResults = results;
         mAddListener = listener;
+        mMarkListener = markListener;
         mRealm = realm;
     }
 
@@ -47,16 +49,26 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+
     /**
      * View holder definition. Represents a single row within the recycler view.
      * TODO: Investigate if mText can be cached.
+     * TODO: Why is swipe listener implemented by adapter whilst mark listener is implemented by drop holder ?
      */
-    public static class DropHolder extends RecyclerView.ViewHolder {
+    public static class DropHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView mText;
+        MarkListener mMarkListener;
 
-        public DropHolder(View itemView) {
+        public DropHolder(View itemView, MarkListener markListener) {
             super(itemView);
+            mMarkListener = markListener;
+            itemView.setOnClickListener(this);
             mText = (TextView) itemView.findViewById(R.id.tv_what);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mMarkListener.onMark(getAdapterPosition());
         }
     }
 
@@ -98,7 +110,7 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         if (viewType == ITEM) {
             view = mInflater.inflate(R.layout.row_drop, parent, false);
-            return new DropHolder(view);
+            return new DropHolder(view, mMarkListener);
         } else {
             view = mInflater.inflate(R.layout.footer, parent, false);
             return new FooterHolder(view);

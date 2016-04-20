@@ -18,6 +18,7 @@ import io.realm.RealmResults;
 import io.sdevaraj.goals.adapters.AdapterDrops;
 import io.sdevaraj.goals.adapters.AddListener;
 import io.sdevaraj.goals.adapters.Divider;
+import io.sdevaraj.goals.adapters.MarkListener;
 import io.sdevaraj.goals.adapters.SimpleTouchCallback;
 import io.sdevaraj.goals.beans.Drop;
 import io.sdevaraj.goals.widgets.BucketRecyclerView;
@@ -47,12 +48,22 @@ public class ActivityMain extends AppCompatActivity {
     };
 
     /**
-     * Implements the methods for the interface between the adapter and fragment
+     * Implements the methods for the AddListener interface between the adapter and fragment
      */
     private AddListener mAddListener = new AddListener() {
         @Override
         public void add() {
             showDialogAdd();
+        }
+    };
+
+    /**
+     * Implements the methods for the MarkListener interface between the adapter and fragment
+     */
+    private MarkListener mMarkListener = new MarkListener() {
+        @Override
+        public void onMark(int position) {
+            showDialogMark(position);
         }
     };
 
@@ -72,8 +83,20 @@ public class ActivityMain extends AppCompatActivity {
     private void showDialogAdd() {
         // TODO: Investigate if a new instance to be created every time clicked.
         DialogAdd dialog = new DialogAdd();
-        Log.d(TAG, "showDialogAdd is called");
         dialog.show(getSupportFragmentManager(), "Add");
+    }
+
+    /**
+     * Shows the dialog fragment on clicking the 'drop'.
+     * @param position
+     */
+    private void showDialogMark(int position) {
+        // TODO: Investigate if a new instance to be created every time clicked.
+        DialogMark dialog = new DialogMark();
+        Bundle bundle = new Bundle();
+        bundle.putInt("POSITION", position);
+        dialog.setArguments(bundle);
+        dialog.show(getSupportFragmentManager(), "Mark");
     }
 
     /**
@@ -106,7 +129,7 @@ public class ActivityMain extends AppCompatActivity {
 
         // adds an adapter to the RecyclerView ie to provide a mapping
         // between the data and view
-        mAdapter = new AdapterDrops(this, mRealm, mResults, mAddListener);
+        mAdapter = new AdapterDrops(this, mRealm, mResults, mAddListener, mMarkListener);
         mRecycler.setAdapter(mAdapter);
 
         // add the decoration ie divider for the recycler view
