@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import io.sdevaraj.goals.adapters.AdapterDrops;
 import io.sdevaraj.goals.adapters.AddListener;
 import io.sdevaraj.goals.adapters.CompleteListener;
@@ -180,6 +181,28 @@ public class ActivityMain extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        switch (id) {
+            case R.id.action_add:
+                showDialogAdd();
+                mResults.addChangeListener(mChangeListener);
+                return true;
+            case R.id.action_show_complete:
+                mResults = mRealm.where(Drop.class).equalTo("completed", true).findAllAsync();
+                mResults.addChangeListener(mChangeListener);
+                return true;
+            case R.id.action_show_incomplete:
+                mResults = mRealm.where(Drop.class).equalTo("completed", false).findAllAsync();
+                mResults.addChangeListener(mChangeListener);
+                return true;
+            case R.id.action_sort_ascending_date:
+                mResults = mRealm.where(Drop.class).findAllSortedAsync("when");
+                mResults.addChangeListener(mChangeListener);
+                return true;
+            case R.id.action_sort_descending_date:
+                mResults = mRealm.where(Drop.class).findAllSortedAsync("when", Sort.DESCENDING);
+                mResults.addChangeListener(mChangeListener);
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
