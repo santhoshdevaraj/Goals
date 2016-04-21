@@ -1,5 +1,6 @@
 package io.sdevaraj.goals;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import io.sdevaraj.goals.adapters.AdapterDrops;
 import io.sdevaraj.goals.adapters.AddListener;
 import io.sdevaraj.goals.adapters.CompleteListener;
 import io.sdevaraj.goals.adapters.Divider;
+import io.sdevaraj.goals.adapters.Filter;
 import io.sdevaraj.goals.adapters.MarkListener;
 import io.sdevaraj.goals.adapters.SimpleTouchCallback;
 import io.sdevaraj.goals.beans.Drop;
@@ -130,7 +132,8 @@ public class ActivityMain extends AppCompatActivity {
         Log.d(TAG, "realm in oncreate is " + mRealm);
 
         // gets the db records through an async call
-        mResults = mRealm.where(Drop.class).findAllAsync();
+        int filterOption = load();
+        loadResults(filterOption);
 
         // gets the view objects from xml widgets
         mButton = (Button) findViewById(R.id.iv_button);
@@ -160,10 +163,33 @@ public class ActivityMain extends AppCompatActivity {
 
         // sets the required event listeners
         mButton.setOnClickListener(mBtnListener);
-        mResults.addChangeListener(mChangeListener);
 
         // sets the background image through the glide library
         initBackgroundImage();
+    }
+
+    /**
+     * Loads the results from Realm based on filter option.
+     */
+    private void loadResults(int filterOption) {
+        switch (filterOption) {
+            case Filter.NONE:
+                mResults = mRealm.where(Drop.class).findAllAsync();
+                break;
+            case Filter.MOST_TIME_LEFT:
+                mResults = mRealm.where(Drop.class).findAllSortedAsync("when", Sort.DESCENDING);
+                break;
+            case Filter.LEAST_TIME_LEFT:
+                mResults = mRealm.where(Drop.class).findAllSortedAsync("when");
+                break;
+            case Filter.COMPLETE:
+                mResults = mRealm.where(Drop.class).equalTo("completed", true).findAllAsync();
+                break;
+            case Filter.INCOMPLETE:
+                mResults = mRealm.where(Drop.class).equalTo("completed", false).findAllAsync();
+                break;
+        }
+        mResults.addChangeListener(mChangeListener);
     }
 
     /**
@@ -181,29 +207,51 @@ public class ActivityMain extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        boolean handled = true;
+        int filterOption = Filter.NONE;
+
         switch (id) {
             case R.id.action_add:
                 showDialogAdd();
-                mResults.addChangeListener(mChangeListener);
-                return true;
+                return handled;
             case R.id.action_show_complete:
-                mResults = mRealm.where(Drop.class).equalTo("completed", true).findAllAsync();
-                mResults.addChangeListener(mChangeListener);
-                return true;
+                filterOption = Filter.COMPLETE;
+                break;
             case R.id.action_show_incomplete:
-                mResults = mRealm.where(Drop.class).equalTo("completed", false).findAllAsync();
-                mResults.addChangeListener(mChangeListener);
-                return true;
+                filterOption = Filter.INCOMPLETE;
+                break;
             case R.id.action_sort_ascending_date:
-                mResults = mRealm.where(Drop.class).findAllSortedAsync("when");
-                mResults.addChangeListener(mChangeListener);
-                return true;
+                filterOption = Filter.LEAST_TIME_LEFT;
+                break;
             case R.id.action_sort_descending_date:
-                mResults = mRealm.where(Drop.class).findAllSortedAsync("when", Sort.DESCENDING);
-                mResults.addChangeListener(mChangeListener);
-                return true;
+                filterOption = Filter.MOST_TIME_LEFT;
+                break;
+            default:
+                handled = false;
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        save(filterOption);
+        loadResults(filterOption);
+
+        return handled;
+    }
+
+    /**
+     * Saves the shared preference to the preferences file.
+     */
+    private void save(int filterOption) {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putInt("filter", filterOption);
+        edit.apply();
+    }
+
+    /**
+     * Loads the shared preference from the preferences file.
+     */
+    private int load() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        return preferences.getInt("filter", Filter.NONE);
     }
 
     /**
