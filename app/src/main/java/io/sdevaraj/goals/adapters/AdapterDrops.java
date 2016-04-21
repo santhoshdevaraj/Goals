@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,11 +67,12 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     /**
      * View holder definition. Represents a single row within the recycler view.
-     * TODO: Investigate if mText can be cached.
+     * TODO: Investigate if mTextWhat can be cached.
      * TODO: Why is swipe listener implemented by adapter whilst mark listener is implemented by drop holder ?
      */
     public static class DropHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView mText;
+        TextView mTextWhat;
+        TextView mTextWhen;
         MarkListener mMarkListener;
         Context mContext;
 
@@ -79,7 +81,8 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mContext = itemView.getContext();
             mMarkListener = markListener;
             itemView.setOnClickListener(this);
-            mText = (TextView) itemView.findViewById(R.id.tv_what);
+            mTextWhat = (TextView) itemView.findViewById(R.id.tv_what);
+            mTextWhen = (TextView) itemView.findViewById(R.id.tv_when);
         }
 
         @Override
@@ -88,10 +91,18 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         /**
-         * Sets the text in each drop. Called from onBindViewHolder.
+         * Sets the text for what in each drop. Called from onBindViewHolder.
          */
         public void setWhat(String what) {
-            mText.setText(what);
+            mTextWhat.setText(what);
+        }
+
+        /**
+         * Sets the text for when in each drop. Called from onBindViewHolder.
+         */
+        public void setWhen(long when) {
+            mTextWhen.setText(DateUtils.getRelativeTimeSpanString(when, System.currentTimeMillis(),
+                    DateUtils.DAY_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL));
         }
 
         /**
@@ -175,6 +186,7 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             DropHolder dropHolder = (DropHolder) holder;
             Drop drop = mResults.get(position);
             dropHolder.setWhat(drop.getWhat());
+            dropHolder.setWhen(drop.getWhen());
             dropHolder.setBackground(drop.isCompleted());
         }
     }
