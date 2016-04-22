@@ -1,6 +1,5 @@
 package io.sdevaraj.goals;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -132,7 +131,7 @@ public class ActivityMain extends AppCompatActivity {
         Log.d(TAG, "realm in oncreate is " + mRealm);
 
         // gets the db records through an async call
-        int filterOption = load();
+        int filterOption = AppBucketDrops.load(this);
         loadResults(filterOption);
 
         // gets the view objects from xml widgets
@@ -230,28 +229,10 @@ public class ActivityMain extends AppCompatActivity {
                 handled = false;
                 break;
         }
-        save(filterOption);
+        AppBucketDrops.save(this, filterOption);
         loadResults(filterOption);
 
         return handled;
-    }
-
-    /**
-     * Saves the shared preference to the preferences file.
-     */
-    private void save(int filterOption) {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor edit = preferences.edit();
-        edit.putInt("filter", filterOption);
-        edit.apply();
-    }
-
-    /**
-     * Loads the shared preference from the preferences file.
-     */
-    private int load() {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        return preferences.getInt("filter", Filter.NONE);
     }
 
     /**
