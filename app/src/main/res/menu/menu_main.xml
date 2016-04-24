@@ -7,6 +7,9 @@
         android:title="Add"
         app:showAsAction="always"></item>
     <item
+        android:id="@+id/action_sort_none"
+        android:title="None" />
+    <item
         android:id="@+id/action_sort_descending_date"
         android:title="Most Time Left" />
     <item
