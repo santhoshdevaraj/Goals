@@ -226,6 +226,18 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     /**
+     * Assigns the id for each item.
+     */
+    @Override
+    public long getItemId(int position) {
+        if (position < mResults.size()) {
+            return mResults.get(position).getAdded();
+        } else {
+            return super.getItemId(position);
+        }
+    }
+
+    /**
      * Gets the count of drops for drawing the adapter.
      * TODO: Investigate if mResults can be null
      */

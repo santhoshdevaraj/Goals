@@ -144,6 +144,8 @@ public class ActivityMain extends AppCompatActivity {
         // adds an adapter to the RecyclerView ie to provide a mapping
         // between the data and view
         mAdapter = new AdapterDrops(this, mRealm, mResults, mAddListener, mMarkListener);
+        mAdapter.setHasStableIds(true);
+
         mRecycler.setAdapter(mAdapter);
 
         // add the decoration ie divider for the recycler view
