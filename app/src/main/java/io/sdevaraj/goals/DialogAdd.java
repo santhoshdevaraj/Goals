@@ -47,6 +47,15 @@ public class DialogAdd extends DialogFragment {
     };
 
     /**
+     * Called before the fragment is created to apply the styles. Refer the fragment life cycle.
+     */
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogTheme);
+    }
+
+    /**
      * Called when a drop is added. Inserts a new row to the realm DB.
      * TODO: Investigate if the realm changes can happen through an interface.
      * TODO: Investigate if transaction can be wrapped as a decorator.

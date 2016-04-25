@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="deep_blue">#241543</color>
+    <color name="green">#f674a199</color>
     <color name="bg_row_drop_dark">#BD8E79BB</color>
     <color name="bg_drop_complete">#ED8E79BB</color>
     <color name="bg_row_drop_light">#4A8E79BB</color>
