@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +39,6 @@ public class ActivityMain extends AppCompatActivity {
     RealmResults<Drop> mResults;
     AdapterDrops mAdapter;
     View mEmptyDrop;
-    public static final String TAG = "Santhosh";
 
     /**
      * Listener for 'add drop' button click event
@@ -128,7 +126,6 @@ public class ActivityMain extends AppCompatActivity {
 
         // gets the default instance realm object
         mRealm = Realm.getDefaultInstance();
-        Log.d(TAG, "realm in oncreate is " + mRealm);
 
         // gets the db records through an async call
         int filterOption = AppBucketDrops.load(this);
