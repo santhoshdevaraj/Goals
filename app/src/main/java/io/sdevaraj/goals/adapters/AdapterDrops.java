@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.sdevaraj.goals.AppBucketDrops;
 import io.sdevaraj.goals.R;
 import io.sdevaraj.goals.beans.Drop;
 
@@ -25,11 +26,15 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private LayoutInflater mInflater;
     private RealmResults<Drop> mResults;
     private Realm mRealm;
+    public static final int COUNT_FOOTER = 1;
+    public static final int COUNT_NO_ITEMS = 1;
     public static final int ITEM = 0;
-    public static final int FOOTER = 1;
-    public static final String TAG = "Santhosh";
+    public static final int NO_ITEM = 1;
+    public static final int FOOTER = 2;
+    private int mFilterOption;
     private AddListener mAddListener;
     private MarkListener mMarkListener;
+    private Context mContext;
 
     public AdapterDrops(Context context, Realm realm, RealmResults<Drop> results, AddListener listener, MarkListener markListener) {
         mInflater = LayoutInflater.from(context);
@@ -37,6 +42,7 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         mAddListener = listener;
         mMarkListener = markListener;
         mRealm = realm;
+        mContext = context;
     }
 
     /**
@@ -138,11 +144,23 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     /**
+     * View holder definition. Represents the no item view within the recycler view.
+     */
+    public class NoItemsHolder extends RecyclerView.ViewHolder {
+
+        public NoItemsHolder(View itemView) {
+            super(itemView);
+        }
+
+    }
+
+    /**
      * Called from ActivityMain. Redraws the adapter, when the RealmChangeListener is triggered on
      * RealmResults change.
      */
     public void Update(RealmResults<Drop> results) {
         mResults = results;
+        mFilterOption = AppBucketDrops.load(mContext);
         // Notify any registered observers that the data set has changed. Calls the onChanged()
         // method in the registered observer(s).
         notifyDataSetChanged();
@@ -158,7 +176,11 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (viewType == ITEM) {
             view = mInflater.inflate(R.layout.row_drop, parent, false);
             return new DropHolder(view, mMarkListener);
-        } else {
+        } else if (viewType == NO_ITEM) {
+            view = mInflater.inflate(R.layout.no_item, parent, false);
+            return new NoItemsHolder(view);
+        }
+        else {
             view = mInflater.inflate(R.layout.footer, parent, false);
             return new FooterHolder(view);
         }
@@ -170,10 +192,22 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      */
     @Override
     public int getItemViewType(int position) {
-        if (position < mResults.size()) {
-            return ITEM;
+        if (!mResults.isEmpty()) {
+            if (position < mResults.size()) {
+                return ITEM;
+            } else {
+                return FOOTER;
+            }
         } else {
-            return FOOTER;
+            if (mFilterOption == Filter.COMPLETE || mFilterOption == Filter.INCOMPLETE) {
+                if (position == 0) {
+                    return NO_ITEM;
+                } else {
+                    return FOOTER;
+                }
+            } else { //just completing the clause;
+                return FOOTER;
+            }
         }
     }
 
@@ -197,7 +231,16 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      */
     @Override
     public int getItemCount() {
-        return mResults.size() + 1;
+        if (!mResults.isEmpty()) {
+            return mResults.size() + COUNT_FOOTER;
+        }
+        else {
+            if (mFilterOption == Filter.LEAST_TIME_LEFT || mFilterOption == Filter.MOST_TIME_LEFT || mFilterOption == Filter.NONE) {
+                return mResults.size() + COUNT_FOOTER;
+            } else {
+                return COUNT_NO_ITEMS + COUNT_FOOTER;
+            }
+        }
     }
 
 }
