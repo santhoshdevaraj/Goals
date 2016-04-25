@@ -23,6 +23,7 @@ import io.sdevaraj.goals.adapters.CompleteListener;
 import io.sdevaraj.goals.adapters.Divider;
 import io.sdevaraj.goals.adapters.Filter;
 import io.sdevaraj.goals.adapters.MarkListener;
+import io.sdevaraj.goals.adapters.ResetListener;
 import io.sdevaraj.goals.adapters.SimpleTouchCallback;
 import io.sdevaraj.goals.beans.Drop;
 import io.sdevaraj.goals.widgets.BucketRecyclerView;
@@ -57,6 +58,18 @@ public class ActivityMain extends AppCompatActivity {
         @Override
         public void add() {
             showDialogAdd();
+        }
+    };
+
+    /**
+     * Implements the methods for the ResetListener interface between the activity and adapter
+     */
+    private ResetListener mResetListener = new ResetListener() {
+
+        @Override
+        public void onReset() {
+            AppBucketDrops.save(ActivityMain.this, Filter.NONE);
+            loadResults(Filter.NONE);
         }
     };
 
@@ -143,7 +156,7 @@ public class ActivityMain extends AppCompatActivity {
 
         // adds an adapter to the RecyclerView ie to provide a mapping
         // between the data and view
-        mAdapter = new AdapterDrops(this, mRealm, mResults, mAddListener, mMarkListener);
+        mAdapter = new AdapterDrops(this, mRealm, mResults, mAddListener, mMarkListener, mResetListener);
         mAdapter.setHasStableIds(true);
 
         mRecycler.setAdapter(mAdapter);

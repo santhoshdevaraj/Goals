@@ -34,13 +34,15 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private int mFilterOption;
     private AddListener mAddListener;
     private MarkListener mMarkListener;
+    private ResetListener mResetListener;
     private Context mContext;
 
-    public AdapterDrops(Context context, Realm realm, RealmResults<Drop> results, AddListener listener, MarkListener markListener) {
+    public AdapterDrops(Context context, Realm realm, RealmResults<Drop> results, AddListener listener, MarkListener markListener, ResetListener resetListener) {
         mInflater = LayoutInflater.from(context);
         mResults = results;
         mAddListener = listener;
         mMarkListener = markListener;
+        mResetListener = resetListener;
         mRealm = realm;
         mContext = context;
     }
@@ -56,6 +58,10 @@ public class AdapterDrops extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mRealm.commitTransaction();
             notifyItemRemoved(position);
         }
+        if (mResults.isEmpty() && (mFilterOption == Filter.COMPLETE  || mFilterOption == Filter.INCOMPLETE)) {
+            mResetListener.onReset();
+        }
+
     }
 
     /**
