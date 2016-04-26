@@ -10,4 +10,5 @@
     <color name="bg_row_drop_light">#4A8E79BB</color>
     <color name="bg_dialog">#E30D0028</color>
     <color name="ic_check">#C35DC66E</color>
+    <color name="purple">#c38c6dd6</color>
 </resources>
