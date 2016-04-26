@@ -6,5 +6,9 @@
             <size android:width="96dp" />
         </shape>
     </item>
-    <item android:drawable="@drawable/ic_up_normal" android:gravity="center"></item>
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/ic_up_normal" />
+    </item>
 </layer-list>

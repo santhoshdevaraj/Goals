@@ -5,5 +5,9 @@
             <solid android:color="@android:color/transparent" />
         </shape>
     </item>
-    <item android:drawable="@drawable/ic_down_pressed"></item>
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/ic_down_pressed" />
+    </item>
 </layer-list>
