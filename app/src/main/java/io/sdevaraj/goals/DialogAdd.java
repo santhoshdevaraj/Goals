@@ -7,14 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import java.util.Calendar;
-
 import io.realm.Realm;
 import io.sdevaraj.goals.beans.Drop;
+import io.sdevaraj.goals.widgets.BucketPickerView;
 
 
 /**
@@ -24,7 +22,7 @@ public class DialogAdd extends DialogFragment {
 
     private ImageButton mBtnClose;
     private EditText mInputWhat;
-    private DatePicker mInputWhen;
+    private BucketPickerView mInputWhen;
     private Button mBtnAdd;
     public static final String TAG = "Santhosh";
 
@@ -62,11 +60,9 @@ public class DialogAdd extends DialogFragment {
      */
     private void addAction() {
         String what = mInputWhat.getText().toString();
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(mInputWhen.getYear(), mInputWhen.getMonth(), mInputWhen.getDayOfMonth());
         long now = System.currentTimeMillis();
         Realm realm = Realm.getDefaultInstance();
-        Drop drop = new Drop(what, now, calendar.getTimeInMillis(), false);
+        Drop drop = new Drop(what, now, mInputWhen.getTime(), false);
 
         realm.beginTransaction();
         realm.copyToRealm(drop);
@@ -86,7 +82,7 @@ public class DialogAdd extends DialogFragment {
         // gets the view objects from xml widgets
         mInputWhat = (EditText) view.findViewById(R.id.et_drop);
         mBtnClose = (ImageButton) view.findViewById(R.id.btn_close);
-        mInputWhen = (DatePicker) view.findViewById(R.id.bpv_date);
+        mInputWhen = (BucketPickerView) view.findViewById(R.id.bpv_date);
         mBtnAdd = (Button) view.findViewById(R.id.btn_add);
 
         // adds the event handlers for add and close
