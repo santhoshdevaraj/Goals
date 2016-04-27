@@ -11,4 +11,5 @@
     <dimen name="btn_add_margin_horizontal">60dp</dimen>
     <dimen name="btn_add_margin_vertical">128dp</dimen>
     <dimen name="tv_no_items_vertical_padding">22dp</dimen>
+    <dimen name="bg_picker_item_corner_radius">4dp</dimen>
 </resources>

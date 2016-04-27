@@ -4,6 +4,9 @@
         <shape>
             <solid android:color="@android:color/transparent" />
         </shape>
+        <corners
+            android:bottomLeftRadius="@dimen/bg_picker_item_corner_radius"
+            android:bottomRightRadius="@dimen/bg_picker_item_corner_radius" />
     </item>
     <item>
         <bitmap
