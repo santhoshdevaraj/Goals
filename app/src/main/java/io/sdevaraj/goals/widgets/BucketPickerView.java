@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import io.sdevaraj.goals.R;
@@ -19,6 +20,7 @@ public class BucketPickerView extends LinearLayout {
     private TextView mTextDate;
     private TextView mTextYear;
     private Calendar mCalendar;
+    private SimpleDateFormat mFormatter;
 
     public BucketPickerView(Context context) {
         super(context);
@@ -40,6 +42,7 @@ public class BucketPickerView extends LinearLayout {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.bucket_picker_view, this);
         mCalendar = Calendar.getInstance();
+        mFormatter = new SimpleDateFormat("MMM");
     }
 
 
@@ -65,7 +68,7 @@ public class BucketPickerView extends LinearLayout {
     private void update(int date, int month, int year, int hour, int minute, int second) {
         mCalendar.set(year, month, date, hour, minute, second);
         mTextDate.setText(date + "");
-        mTextMonth.setText(month + "");
+        mTextMonth.setText(mFormatter.format(mCalendar.getTime()));
         mTextYear.setText(year + "");
     }
 
