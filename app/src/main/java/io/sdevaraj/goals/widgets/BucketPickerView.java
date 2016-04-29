@@ -3,8 +3,10 @@ package io.sdevaraj.goals.widgets;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -282,5 +284,35 @@ public class BucketPickerView extends LinearLayout implements View.OnTouchListen
         } else {
             textView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.up_normal, 0 , R.drawable.down_normal);
         }
+    }
+
+    /**
+     * Saves the state to persist the calendar values across the different screen modes like landscape, portrait, etc,.
+     */
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Bundle mBundle = new Bundle();
+        mBundle.putParcelable("super", super.onSaveInstanceState()); // state of the view
+        mBundle.putInt("month", mCalendar.get(Calendar.MONTH));
+        mBundle.putInt("date", mCalendar.get(Calendar.DATE));
+        mBundle.putInt("year", mCalendar.get(Calendar.YEAR));
+        return mBundle;
+    }
+
+    /**
+     * Restores the state of the calendar back to the original state before the screen inversion.
+     */
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        Parcelable mState = null;
+        if (state instanceof Parcelable) {
+            Bundle mBundle = (Bundle) state;
+            mState = mBundle.getParcelable("super"); // restore the state of the view
+            int month = mBundle.getInt("month");
+            int date = mBundle.getInt("date");
+            int year = mBundle.getInt("year");
+            update(date, month, year, 0, 0, 0);
+        }
+        super.onRestoreInstanceState(mState);
     }
 }
