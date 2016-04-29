@@ -160,35 +160,42 @@ public class BucketPickerView extends LinearLayout implements View.OnTouchListen
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         mIncrement = true;
+                        toggleDrawable(textView, true);
                         modifyViewValues(mActiveId, INCREMENT);
                         mHandler.removeMessages(MESSAGE_WHAT);
                         mHandler.sendEmptyMessageDelayed(MESSAGE_WHAT, DELAY);
                         break;
                     case MotionEvent.ACTION_UP:
                         mIncrement = false;
+                        toggleDrawable(textView, false);
                         break;
                     case MotionEvent.ACTION_CANCEL:
                         mIncrement = false;
+                        toggleDrawable(textView, false);
                         break;
                 }
             } else if (bottomDrawableHit(textView, bottomBounds.height(), x, y)) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         mDecrement = true;
+                        toggleDrawable(textView, true);
                         modifyViewValues(mActiveId, DECREMENT);
                         mHandler.removeMessages(MESSAGE_WHAT);
                         mHandler.sendEmptyMessageDelayed(MESSAGE_WHAT, DELAY);
                         break;
                     case MotionEvent.ACTION_UP:
                         mDecrement = false;
+                        toggleDrawable(textView, false);
                         break;
                     case MotionEvent.ACTION_CANCEL:
                         mDecrement = false;
+                        toggleDrawable(textView, false);
                         break;
                 }
             } else {
                 mIncrement = false;
                 mDecrement = false;
+                toggleDrawable(textView, false);
             }
         }
     }
@@ -259,5 +266,21 @@ public class BucketPickerView extends LinearLayout implements View.OnTouchListen
         mTextDate.setText(date + "");
         mTextYear.setText(year + "");
         mTextMonth.setText(mFormatter.format(mCalendar.getTime()));
+    }
+
+    /**
+     * Toggles the drawables based on state of events ie on ACTION_DOWN & ACTION_UP
+     */
+    private void toggleDrawable(TextView textView, boolean pressed) {
+        if (pressed) {
+            if (mIncrement) {
+                textView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.up_pressed, 0, R.drawable.down_normal);
+            }
+            if (mDecrement) {
+                textView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.up_normal, 0 , R.drawable.down_pressed);
+            }
+        } else {
+            textView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.up_normal, 0 , R.drawable.down_normal);
+        }
     }
 }
