@@ -3,8 +3,9 @@ package io.sdevaraj.goals.widgets;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +21,10 @@ import io.sdevaraj.goals.R;
  * View for the bucket_picker_view.xml file.
  */
 public class BucketPickerView extends LinearLayout implements View.OnTouchListener {
+    private static final int MESSAGE_WHAT = 123;
+    public static final int INCREMENT = 1;
+    public static final int DECREMENT = -1;
+    public static final int DELAY = 100;
     private TextView mTextMonth;
     private TextView mTextDate;
     private TextView mTextYear;
@@ -28,9 +33,35 @@ public class BucketPickerView extends LinearLayout implements View.OnTouchListen
     public static final int TOP = 1;
     public static final int RIGHT = 2;
     public static final int BOTTOM = 3;
+    private boolean mIncrement;
+    private boolean mDecrement;
+    private int mActiveId;
 
     private SimpleDateFormat mFormatter;
-    public static final String TAG = "Santhosh";
+    public static final String TAG = "STAN";
+
+    /**
+     * Handles the messages from the looper and actions appropriately.
+     */
+    private Handler mHandler = new Handler(new Handler.Callback() {
+        /**
+         * callback to handle message and send message back
+         */
+        @Override
+        public boolean handleMessage(Message msg) {
+            if (mIncrement) {
+                modifyViewValues(mActiveId, INCREMENT);
+            }
+            if (mDecrement){
+                modifyViewValues(mActiveId, DECREMENT);
+            }
+            // Send message again
+            if (mIncrement || mDecrement) {
+                mHandler.sendEmptyMessageDelayed(MESSAGE_WHAT, DELAY);
+            }
+            return true;
+        }
+    });
 
     public BucketPickerView(Context context) {
         super(context);
@@ -124,32 +155,40 @@ public class BucketPickerView extends LinearLayout implements View.OnTouchListen
             Rect bottomBounds = compoundDrawables[BOTTOM].getBounds();
             float x = event.getX();
             float y = event.getY();
+            mActiveId = textView.getId();
             if (topDrawableHit(textView, topBounds.height(), x, y)) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        modifyViewValues(textView.getId(), 1);
+                        mIncrement = true;
+                        modifyViewValues(mActiveId, INCREMENT);
+                        mHandler.removeMessages(MESSAGE_WHAT);
+                        mHandler.sendEmptyMessageDelayed(MESSAGE_WHAT, DELAY);
                         break;
                     case MotionEvent.ACTION_UP:
-                        break;
-                    case MotionEvent.ACTION_MOVE:
+                        mIncrement = false;
                         break;
                     case MotionEvent.ACTION_CANCEL:
+                        mIncrement = false;
                         break;
                 }
             } else if (bottomDrawableHit(textView, bottomBounds.height(), x, y)) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        modifyViewValues(textView.getId(), -1);
+                        mDecrement = true;
+                        modifyViewValues(mActiveId, DECREMENT);
+                        mHandler.removeMessages(MESSAGE_WHAT);
+                        mHandler.sendEmptyMessageDelayed(MESSAGE_WHAT, DELAY);
                         break;
                     case MotionEvent.ACTION_UP:
-                        break;
-                    case MotionEvent.ACTION_MOVE:
+                        mDecrement = false;
                         break;
                     case MotionEvent.ACTION_CANCEL:
+                        mDecrement = false;
                         break;
                 }
             } else {
-                Log.d(TAG, "Pressed outside the drawable");
+                mIncrement = false;
+                mDecrement = false;
             }
         }
     }
