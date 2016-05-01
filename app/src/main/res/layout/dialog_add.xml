@@ -33,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_title"
+            android:background="@drawable/bg_et_drop"
             android:hint="@string/hint_et_drop"
             android:inputType="textVisiblePassword"
             android:padding="16dp" />
